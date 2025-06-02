@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup GameBuyX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .modal-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .modal-enter-active {
+      transition: all 0.3s ease-out;
+      opacity: 1;
+      transform: scale(1);
+    }
+    .modal-leave {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .modal-leave-active {
+      transition: all 0.3s ease-in;
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <!-- Modal Box -->
+    <div id="modalContent" class="bg-blue-600 rounded-lg shadow-lg w-full max-w-3xl flex overflow-hidden relative opacity-0 scale-95 transition-all duration-300">
+
+      <!-- Close Button -->
+      <button onclick="hideModal()" class="absolute top-3 right-3 text-black-500 hover:text-black text-xl">&times;</button>
+
+      <!-- Left Side (Image) -->
+      <div class="w-1/2 hidden md:block bg-gray-100">
+        <img src="/static/banner.jpg" alt="Website Visual" class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Right Side (Form and Buttons) -->
+      <div class="w-full md:w-1/2 p-8 text-white">
+
+        <h2 class="text-2xl font-bold mb-6">Sign up</h2>
+
+        <!-- Buttons container -->
+        <div id="buttonsContainer">
+          <button id="btnEmail" class="w-full flex items-center border border-gray-300 px-4 py-2 rounded-md mb-3 hover:bg-gray-100 hover:text-black transition-colors duration-200 cursor-pointer">
+            <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" class="w-5 h-5 mr-3" alt="Email" />
+            Sign up with Email
+          </button>
+
+          <button id="btnGoogle" class="w-full flex items-center border border-gray-300 px-4 py-2 rounded-md mb-3 hover:bg-gray-100 hover:text-black transition-colors duration-200 cursor-pointer">
+            <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" class="w-5 h-5 mr-3" alt="Google" />
+            Sign up with Google
+          </button>
+
+          <button id="btnDiscord" class="w-full flex items-center border border-gray-300 px-4 py-2 rounded-md mb-3 hover:bg-gray-100 hover:text-black transition-colors duration-200 cursor-pointer">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" class="w-5 h-5 mr-3" alt="Discord" />
+            Sign up with Discord
+          </button>
+
+          <button id="btnFacebook" class="w-full flex items-center border border-gray-300 px-4 py-2 rounded-md mb-4 hover:bg-gray-100 hover:text-black transition-colors duration-200 cursor-pointer">
+            <img src="https://cdn-icons-png.flaticon.com/512/3059/3059446.png" class="w-5 h-5 mr-3" alt="Facebook" />
+            Sign up with Facebook
+          </button>
+        </div>
+
+        <!-- Email Signup Form (hidden initially) -->
+        <form id="emailSignupForm" class="hidden flex flex-col space-y-4" method="POST" action="/signup">
+          <input type="text" name="fullname" placeholder="Full Name" required class="px-3 py-2 rounded text-black" />
+          <input type="email" name="email" placeholder="Email" required class="px-3 py-2 rounded text-black" />
+          <input type="text" name="username" placeholder="Username" required class="px-3 py-2 rounded text-black" />
+          <input type="password" name="password" placeholder="Password" required class="px-3 py-2 rounded text-black" />
+          <input type="password" name="confirm_password" placeholder="Confirm Password" required class="px-3 py-2 rounded text-black" />
+          <button type="submit" class="bg-white text-blue-600 font-bold py-2 rounded hover:bg-gray-200 transition duration-200">Sign Up</button>
+          <button type="button" id="cancelEmail" class="text-white underline">Cancel</button>
+        </form>
+
+        <div class="flex items-start text-sm mt-4 mb-4">
+          <input type="checkbox" class="mt-1 mr-2" id="agree" />
+          <label for="agree" class="text-white text-xs">
+            I agree to receive emails about games, special offers, and updates from Gamebuyx.shop . I understand that I can unsubscribe at any time by clicking the unsubscribe link at the bottom of any email.
+          </label>
+        </div>
+
+        <p class="text-sm text-center">
+          Already have an account? <a href="/login" class="text-white hover:underline">Sign In Here</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Show Modal on Load with Transition -->
+  <script>
+    window.onload = function () {
+      const modal = document.getElementById('signupModal');
+      const content = document.getElementById('modalContent');
+      modal.style.display = 'flex';
+      setTimeout(() => {
+        content.classList.remove('opacity-0', 'scale-95');
+        content.classList.add('opacity-100', 'scale-100');
+      }, 50);
+    };
+
+    function hideModal() {
+      const modal = document.getElementById('signupModal');
+      const content = document.getElementById('modalContent');
+      content.classList.remove('opacity-100', 'scale-100');
+      content.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+    }
+
+    // Buttons & Form logic
+    const btnEmail = document.getElementById('btnEmail');
+    const btnGoogle = document.getElementById('btnGoogle');
+    const btnDiscord = document.getElementById('btnDiscord');
+    const emailForm = document.getElementById('emailSignupForm');
+    const buttonsContainer = document.getElementById('buttonsContainer');
+    const cancelEmail = document.getElementById('cancelEmail');
+
+    btnEmail.addEventListener('click', () => {
+      buttonsContainer.style.display = 'none';
+      emailForm.classList.remove('hidden');
+    });
+
+    cancelEmail.addEventListener('click', () => {
+      emailForm.classList.add('hidden');
+      buttonsContainer.style.display = 'block';
+    });
+
+    btnGoogle.addEventListener('click', () => {
+      alert('Google sign-up service is temporarily unavailable. Please try again later.');
+    });
+
+    btnDiscord.addEventListener('click', () => {
+      alert('Service temporarily unavailable');
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Final Step - Upload Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #fb923c;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen text-white p-6">
+  <div class="max-w-3xl mx-auto bg-white bg-opacity-10 backdrop-blur-md rounded-xl shadow-xl p-8">
+    <h1 class="text-3xl font-bold mb-6 text-center text-orange-400">Finalize Your Offer</h1>
+    <form id="offer-form" method="POST" action="{{ url_for('sell_step2') }}" enctype="multipart/form-data">
+    <!-- Title -->
+    <div class="mb-6">
+      <label for="offer-title" class="block text-lg mb-2">Offer Title</label>
+      <input type="text" id="offer-title" name="offer-title"
+        placeholder="Enter a title for your offer (e.g., 1000 UC PUBG Global)"
+        class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-300"/>
+    </div>
+
+    <!-- Level -->
+    <div class="mb-6">
+  <label for="level" class="block text-lg mb-2 text-white">Level</label>
+  <input
+    type="text"
+    id="level"
+    name="level"
+    class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-400"
+    placeholder="Enter level (e.g., 50-100)"
+  />
+</div>
+
+
+    <!-- Description -->
+    <div class="mb-6">
+      <label for="description" class="block text-lg mb-2">Description</label>
+      <textarea id="description" name="description"
+        rows="5"
+        placeholder="Describe what you're selling and any terms or conditions..."
+        class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-300 resize-none"></textarea>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-6">
+      <label for="price" class="block text-lg mb-2">Price ($)</label>
+      <input type="number" id="price" name="price"
+        placeholder="Enter your price"
+        class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-300" min="0" step="any"/>
+      <!-- Dynamic price info -->
+      <div id="price-info" class="mt-2 text-orange-400 text-sm font-semibold"></div>
+      <div id="fee-info" class="text-gray-400 text-xs">Transaction Fee (Per Purchase): 0% of Sales</div>
+    </div>
+
+    <!-- Delivery Type -->
+    <div class="mb-6">
+      <label class="block text-lg mb-2">Delivery Type</label>
+      <select id="delivery-type" name="delivery-type"
+        class="w-full p-3 rounded-md bg-gray-800 text-white">
+        <option value="" disabled selected>Select Delivery Type</option>
+        <option value="automatic">Automatic</option>
+        <option value="manual">Manual</option>
+      </select>
+    </div>
+
+    <!-- Conditional Section -->
+    <div id="conditional-section" class="mb-6 hidden">
+      <!-- This will be dynamically replaced -->
+    </div>
+
+    <!-- Upload Code -->
+    <div class="mb-6">
+      <label for="upload-code" class="block text-lg mb-2">Upload File ( Image)</label>
+      <input type="file" id="upload-code" name="upload-code"
+        accept=".txt, .jpg, .jpeg, .png"
+        class="w-full p-3 rounded-md bg-gray-800 text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600"/>
+    </div>
+
+    <!-- Agreement -->
+    <div class="flex items-center mb-6">
+      <input type="checkbox" id="agreement" class="mr-2">
+      <label for="agreement" class="text-sm">I confirm that the file uploaded is genuine and I have read all terms.</label>
+    </div>
+
+    <!-- Submit -->
+    <div class="text-center">
+    <button
+      type="submit"
+      id="submit-btn"
+      class="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition duration-300">
+      Submit Offer
+    </button>
+  </div>
+  </div>
+</form>
+
+  <script>
+    const deliveryType = document.getElementById('delivery-type');
+    const conditionalSection = document.getElementById('conditional-section');
+
+    deliveryType.addEventListener('change', function () {
+      const selected = this.value;
+      conditionalSection.innerHTML = ''; // Clear content
+      conditionalSection.classList.remove('hidden');
+
+      if (selected === 'automatic') {
+        conditionalSection.innerHTML = `
+          <label for="game-login" class="block text-lg mb-2">Game Login Details</label>
+          <textarea id="game-login" name="game-login"
+            placeholder="Enter game account username and any relevant login details..."
+            class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-300 resize-none"></textarea>
+            <label for="stock" class="block text-lg mb-2">Stock</label>
+          <input type="number" id="stock" name="stock" min="0" step="1"
+            placeholder="Enter how many products you have in stock"
+            class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-300"/>
+        `;
+      } else if (selected === 'manual') {
+        conditionalSection.innerHTML = `
+          <label for="delivery-time" class="block text-lg mb-2">Estimated Delivery Time</label>
+          <input type="text" id="delivery-time" name="delivery-time"
+            placeholder="e.g., Within 24 hours"
+            class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-300 mb-4"/>
+          
+          <label for="stock" class="block text-lg mb-2">Stock</label>
+          <input type="number" id="stock" name="stock" min="0" step="1"
+            placeholder="Enter how many products you have in stock"
+            class="w-full p-3 rounded-md bg-gray-800 text-white placeholder-gray-300"/>
+        `;
+      } else {
+        conditionalSection.classList.add('hidden');
+      }
+    });
+
+    const priceInput = document.getElementById('price');
+    const priceInfo = document.getElementById('price-info');
+
+    priceInput.addEventListener('input', () => {
+      const price = parseFloat(priceInput.value);
+      if (!isNaN(price) && price > 0) {
+        const priceWithFee = (price * 1.07).toFixed(2);
+        priceInfo.textContent = `Price Paid by Buyer: $${priceWithFee}`;
+      } else {
+        priceInfo.textContent = '';
+      }
+    });
+    document.getElementById('offer-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent submission until validation passes
+
+    const title = document.getElementById('offer-title').value.trim();
+    const level = document.getElementById('level').value;
+    const description = document.getElementById('description').value.trim();
+    const price = document.getElementById('price').value;
+    const deliveryType = document.getElementById('delivery-type').value;
+    const file = document.getElementById('upload-code').files.length;
+    const agreement = document.getElementById('agreement').checked;
+
+    let valid = title && level && description && price && deliveryType && file && agreement;
+
+    // Validate conditional section
+    if (deliveryType === 'automatic') {
+      const gameLogin = document.getElementById('game-login')?.value.trim();
+      const stock = document.getElementById('stock')?.value;
+      valid = valid && gameLogin && stock;
+    } else if (deliveryType === 'manual') {
+      const deliveryTime = document.getElementById('delivery-time')?.value.trim();
+      const stock = document.getElementById('stock')?.value;
+      valid = valid && deliveryTime && stock;
+    }
+
+    if (!valid) {
+      alert("Please fill in all required fields before submitting.");
+    } else {
+      // You can replace this with actual form submission logic
+      alert("Form submitted successfully!");
+      this.submit(); // You can remove this line if you're handling the data with JavaScript or AJAX
+    }
+  });
+  </script>
+</body>
+</html>

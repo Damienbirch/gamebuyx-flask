@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choose Your Business Identity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(to right, #ff7e5f, #feb47b);
+      transition: all 0.3s ease-in-out;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn-gradient:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #feb47b, #ff7e5f);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-gradient:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    }
+
+    .floating-box {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .floating-box:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body class="text-white">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white shadow-lg py-4 px-6">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="#" class="text-3xl font-bold text-blue-600 hover:text-blue-700 transition-all duration-300">GAMEBUYX</a>
+      <div class="flex space-x-6">
+        <!-- <a href="#" class="text-gray-600 hover:text-blue-600 transition-all duration-300">Sell</a> -->
+        <a href="#" class="text-gray-600 hover:text-blue-600 transition-all duration-300">Support</a>
+        <!-- <a href="#" class="text-gray-600 hover:text-blue-600 transition-all duration-300">Log In</a> -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- CHOOSE BUSINESS IDENTITY -->
+  <section class="py-16">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-4xl font-bold mb-4">Choose Your Business Identity</h2>
+
+      <!-- Table-like Box -->
+      <div class="overflow-x-auto bg-white p-6 rounded-lg shadow-md">
+        <table class="min-w-full text-left">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-xl text-black font-semibold">Available Product Category</th>
+              <th class="px-4 py-2 text-xl text-black font-semibold">Individual</th>
+              <th class="px-4 py-2 text-xl text-black font-semibold">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="px-4 py-2 text-black">Digital Top Up</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Gift Cards</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Game Point</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Video Games</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Software</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Subscription</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Game Coins</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Items</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Account</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Boosting</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-black">Coaching</td>
+              <td class="px-4 py-2"><span class="text-blue-600">✔</span></td>
+              <td class="px-4 py-2"><span class="text-blue-600">✘</span></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="px-4 py-4">
+                <div class="flex justify-between">
+                  <!-- Individual Apply button under Individual column -->
+                  <button type="button" onclick="window.location.href='/application-step4'"class="btn-gradient">Individual Apply</button>
+                  <!-- Enterprise Apply button under Enterprise column -->
+                  <button class="btn-gradient">Enterprise Apply</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-8 text-center text-sm text-white bg-gradient-to-r from-blue-700 to-purple-700">
+    <p>&copy; 2003-2025, Bounty Hunter Technology Co., Limited. All Rights Reserved.</p>
+    <div class="flex justify-center space-x-6 mt-4">
+      <a href="#" class="hover:underline">Terms of Service</a>
+      <a href="#" class="hover:underline">Privacy Notice</a>
+      <a href="#" class="hover:underline">Help Center</a>
+      <a href="#" class="hover:underline">Contact Us</a>
+    </div>
+  </footer>
+
+</body>
+
+</html>

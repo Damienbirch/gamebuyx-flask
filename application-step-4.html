@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Individual Seller Application</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(to right, #ff7e5f, #feb47b);
+      transition: all 0.3s ease-in-out;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn-gradient:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #feb47b, #ff7e5f);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .form-heading {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-group input {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+
+<body class="text-white">
+
+  <!-- Navigation Bar -->
+  <nav class="bg-white shadow-lg py-4 px-6">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="#" class="text-3xl font-bold text-blue-600 hover:text-blue-700 transition-all duration-300">GAMEBUYX</a>
+    </div>
+  </nav>
+
+  <!-- Form Section -->
+  <section class="py-16">
+    <div class="max-w-5xl mx-auto px-6">
+
+      <h2 class="text-4xl font-bold mb-4 text-center">Apply to be an Individual Seller at GAMEBUYX</h2>
+
+      <div class="form-section">
+        <h3 class="form-heading">Step 1: Business Details</h3>
+        <form action="#" method="POST">
+
+          <!-- Targeting Product Categories -->
+          <div class="input-group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg">
+  <label for="product-categories" class="block text-lg font-semibold text-white mb-4">Choose your targeting product categories *</label>
+  <div class="flex flex-wrap gap-4">
+    <label class="text-white px-4 py-2 rounded-xl shadow-lg flex items-center space-x-2 cursor-pointer transition duration-300 bg-gradient-to-r from-orange-400 to-pink-500">
+      <input type="checkbox" name="product-categories" value="Coins" class="accent-white"> <span>Coins</span>
+    </label>
+    <label class="text-white px-4 py-2 rounded-xl shadow-lg flex items-center space-x-2 cursor-pointer transition duration-300 bg-gradient-to-r from-green-400 to-teal-500">
+      <input type="checkbox" name="product-categories" value="Items" class="accent-white"> <span>Items</span>
+    </label>
+    <label class="text-white px-4 py-2 rounded-xl shadow-lg flex items-center space-x-2 cursor-pointer transition duration-300 bg-gradient-to-r from-blue-500 to-indigo-600">
+      <input type="checkbox" name="product-categories" value="Accounts" class="accent-white"> <span>Accounts</span>
+    </label>
+    <label class="text-white px-4 py-2 rounded-xl shadow-lg flex items-center space-x-2 cursor-pointer transition duration-300 bg-gradient-to-r from-purple-500 to-pink-600">
+      <input type="checkbox" name="product-categories" value="Coaching" class="accent-white"> <span>Coaching</span>
+    </label>
+    <label class="text-white px-4 py-2 rounded-xl shadow-lg flex items-center space-x-2 cursor-pointer transition duration-300 bg-gradient-to-r from-red-400 to-yellow-500">
+      <input type="checkbox" name="product-categories" value="Boosting" class="accent-white"> <span>Boosting</span>
+    </label>
+    <label class="text-white px-4 py-2 rounded-xl shadow-lg flex items-center space-x-2 cursor-pointer transition duration-300 bg-gradient-to-r from-cyan-400 to-blue-500">
+      <input type="checkbox" name="product-categories" value="Topup" class="accent-white"> <span>Topup</span>
+    </label>
+  </div>
+</div>
+
+
+          <!-- Games Related to Products -->
+          <div class="input-group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg">
+            <label for="game-names" class="block text-lg">List the game names related to your products *</label>
+            <input type="text" id="game-names" name="game-names" class="w-full p-3 rounded-md mt-2 mb-4 text-gray-500" placeholder="Roblox, Fortnite, Valorant" required />
+          </div>
+
+          <!-- Product SKUs -->
+          <div class="input-group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg">
+            <label for="product-skus" class="block text-lg">How many product SKUs do you have in stock *</label>
+            <select id="product-skus" name="product-skus" class="w-full p-3 rounded-md mt-2 mb-4 text-gray-500" required>
+              <option value="1-20">1 - 20</option>
+              <option value="20-100">20 - 100</option>
+              <option value="100-500">100 - 500</option>
+              <option value="500+">500+</option>
+            </select>
+          </div>
+
+          <!-- Stock Source -->
+          <div class="input-group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg">
+            <label for="stock-sources" class="block text-lg">How do you get your stock *</label>
+            <input type="text" id="stock-sources" name="stock-sources" class="w-full p-3 rounded-md mt-2 mb-4 text-gray-500" required />
+          </div>
+
+          <!-- Legal Source Checkbox -->
+          <!-- <div class="checkbox-group">
+            <label for="legal-source" class="block text-lg">I can prove that my stock comes from legal sources</label>
+            <input type="checkbox" id="legal-source" name="legal-source" class="ml-2" />
+          </div> -->
+
+          <!-- Distribution Links -->
+          <!-- Distribution Links -->
+        <div class="input-group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg">
+          <label for="distribution-location" class="block text-lg">Where do you currently distribute your stock?</label>
+          <input type="url" id="distribution-location" name="distribution-location" class="w-full p-3 rounded-md mt-2 mb-4 text-black" placeholder="https://example.com" />
+          <button type="button" onclick="addDistributionInput()" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-800 to-blue-900 mt-2">+ Add Another Distribution Link</button>
+        </div>
+
+
+          <!-- Additional Distribution Links -->
+          <div id="additional-distribution-links"></div>
+    <form action="{{ url_for('seller_applicationlast') }}" method="POST">
+          <div class="text-center mt-6">
+            <button type="submit" class="btn-gradient">Next Step</button>
+          </div>
+        </form>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 text-center text-sm text-white bg-gradient-to-r from-blue-700 to-purple-700">
+    <p>&copy; 2003-2025, Bounty Hunter Technology Co., Limited. All Rights Reserved.</p>
+    <div class="flex justify-center space-x-6 mt-4">
+      <a href="#" class="hover:underline">Terms of Service</a>
+      <a href="#" class="hover:underline">Privacy Notice</a>
+      <a href="#" class="hover:underline">Help Center</a>
+      <a href="#" class="hover:underline">Contact Us</a>
+    </div>
+  </footer>
+
+  <script>
+    function addDistributionInput() {
+      const newInput = document.createElement("div");
+      newInput.classList.add("input-group", "mt-4");
+      newInput.innerHTML = `
+        <input type="url" name="additional-distribution-location" class="w-full p-3 rounded-md mb-4" placeholder="https://example.com" />
+      `;
+      document.getElementById("additional-distribution-links").appendChild(newInput);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seller Verification - GAMEBUYX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+    }
+    .id-upload-container {
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      width: 100%;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .id-upload-container:hover {
+      border-color: #a78bfa;
+    }
+    .id-upload-container input[type="file"] {
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+    }
+    .id-preview {
+      max-width: 90%;
+      max-height: 180px;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md py-4 px-6">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="#" class="text-2xl sm:text-3xl font-bold text-blue-600 hover:text-blue-700 transition">GAMEBUYX</a>
+    </div>
+  </nav>
+
+  <!-- Form Section -->
+  <main class="flex-grow flex items-center justify-center px-4 py-6">
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('seller_applicationlast') }}"
+      class="bg-white bg-opacity-20 backdrop-blur-md rounded-xl w-full max-w-2xl p-6 sm:p-8 shadow-lg text-white">
+    
+      <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center">Verify Your Identity</h2>
+
+      <!-- Full Name -->
+      <div class="mb-5">
+        <label for="fullName" class="block mb-2 font-semibold">Full Name</label>
+        <input type="text" id="fullName" name="fullName" required placeholder="Your full name"
+          class="w-full rounded-md px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400" />
+      </div>
+
+      <!-- Country Selector -->
+      <div class="mb-5">
+        <label for="country" class="block mb-2 font-semibold">Country</label>
+        <select id="country" name="country" required
+          class="w-full rounded-md px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400">
+          <option value="" disabled selected>Select your country</option>
+        </select>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="mb-5">
+        <label for="phoneNumber" class="block mb-2 font-semibold">Phone Number</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" required placeholder="e.g. 123 456 7890"
+          pattern="[0-9\s+-]{7,15}"
+          class="w-full rounded-md px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400" />
+      </div>
+
+      <!-- Email -->
+      <div class="mb-5">
+        <label for="email" class="block mb-2 font-semibold">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com"
+          class="w-full rounded-md px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400" />
+      </div>
+
+      <!-- Upload Front of ID -->
+      <div class="mb-5">
+        <label class="block mb-2 font-semibold">Upload Front of ID</label>
+        <div class="id-upload-container">
+          <input type="file" id="idFront" name="idFront" accept="image/*" required />
+          <span class="text-white">Click or drag file here</span>
+          <img id="frontPreview" class="id-preview hidden" alt="Front ID Preview" />
+        </div>
+      </div>
+
+      <!-- Upload Back of ID -->
+      <div class="mb-6">
+        <label class="block mb-2 font-semibold">Upload Back of ID</label>
+        <div class="id-upload-container">
+          <input type="file" id="idBack" name="idBack" accept="image/*" required />
+          <span class="text-white">Click or drag file here</span>
+          <img id="backPreview" class="id-preview hidden" alt="Back ID Preview" />
+        </div>
+      </div>
+      <!-- Upload Face Photo -->
+      <div class="mb-6">
+        <label class="block mb-2 font-semibold">Upload selfie with id</label>
+        <div class="id-upload-container">
+          <input type="file" id="facePhoto" name="facePhoto" accept="image/*" required />
+          <span class="text-white">Click or drag file here</span>
+          <img id="facePreview" class="id-preview hidden" alt="Face Photo Preview" />
+        </div>
+      </div>
+
+      <button type="submit"
+        class="w-full bg-gradient-to-r from-pink-500 to-yellow-400 hover:from-pink-600 hover:to-yellow-500 text-gray-900 font-bold py-3 rounded-lg shadow-lg transition transform hover:scale-105">
+        Submit Application
+      </button>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gradient-to-r from-blue-700 to-purple-700 text-center py-5 px-2 text-white text-sm sm:text-base">
+    <p>&copy; 2003-2025, Bounty Hunter Technology Co., Limited. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <script>
+    
+  const countries = [
+    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia",
+    "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
+    "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
+    "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso",
+    "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic",
+    "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia",
+    "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic",
+    "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia",
+    "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany",
+    "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti",
+    "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel",
+    "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati",
+    "Korea North", "Korea South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
+    "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar",
+    "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania",
+    "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro",
+    "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands",
+    "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman",
+    "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines",
+    "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis",
+    "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+    "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone",
+    "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain",
+    "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan",
+    "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
+    "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom",
+    "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
+    "Yemen", "Zambia", "Zimbabwe"
+  ];
+
+  const select = document.getElementById('country');
+  countries.forEach(country => {
+    const option = document.createElement('option');
+    option.value = country;
+    option.textContent = country;
+    select.appendChild(option);
+  });
+
+    // Preview image for front ID
+    const frontInput = document.getElementById('idFront');
+    const frontPreview = document.getElementById('frontPreview');
+    const frontHelp = document.getElementById('frontIDHelp');
+
+    frontInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        frontPreview.src = e.target.result;
+        frontPreview.classList.remove('hidden');
+        frontHelp.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Preview image for back ID
+    const backInput = document.getElementById('idBack');
+    const backPreview = document.getElementById('backPreview');
+    const backHelp = document.getElementById('backIDHelp');
+
+    backInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        backPreview.src = e.target.result;
+        backPreview.classList.remove('hidden');
+        backHelp.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    });
+    const faceInput = document.getElementById('facePhoto');
+const facePreview = document.getElementById('facePreview');
+
+faceInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    facePreview.src = e.target.result;
+    facePreview.classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+});
+
+  </script>
+</body>
+</html>

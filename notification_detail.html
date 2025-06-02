@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Notification Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+</style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-xl mx-auto bg-gray-800 p-6 rounded shadow-lg animate-fade-in">
+    <h2 class="text-2xl font-bold mb-4">Notification</h2>
+    {% if "approved" in message %}
+      <p class="mb-4 text-lg leading-relaxed">
+        🎉 <strong>Welcome to Gambuyx!</strong><br><br>
+        You’ve been approved to start selling. Gambuyx is your marketplace for accounts, tools, and much more. 
+        Post your offers, grow your business, and connect with buyers. Good luck and welcome aboard!
+      </p>
+    {% else %}
+      <p>{{ message }}</p>
+    {% endif %}
+    <p class="text-sm text-gray-400 mt-4">Received: {{ timestamp }}</p>
+  </div>
+</body>
+</html>

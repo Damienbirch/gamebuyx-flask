@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>U7BUY Balance</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-6">
+  <div class="max-w-6xl mx-auto space-y-8">
+
+    <h1 class="text-3xl font-bold text-orange-400">GAMEBUYX Balance</h1>
+
+    <!-- Wallet Settings -->
+    <div class="relative p-1 rounded-xl bg-gradient-to-tr from-orange-400 via-pink-500 to-purple-500 shadow-2xl max-w-md mx-auto">
+  <div class="bg-gray-900 rounded-xl p-6 text-white">
+    
+    <div class="flex flex-col gap-4">
+      <div class="text-sm uppercase tracking-wide text-gray-400">Withdraw Balance</div>
+      <div class="text-4xl font-extrabold text-green-400">0.00 USD</div>
+
+      <div class="flex justify-between mt-6 text-sm text-gray-300">
+        <div>
+          <div class="text-white font-medium text-base">Pending Balance</div>
+          <div class="font-bold text-yellow-300">0.00 USD</div>
+        </div>
+        <div>
+          <div class="text-white font-medium text-base">Consumable Balance</div>
+          <div class="font-bold text-cyan-300">0.00 USD</div>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-400 mt-4">
+        Pending Balance: Funds will be added to your available balance 3 days after the order is completed. (Top up service is 1 day)<br/>
+        The payment may take 1–3 working days on average.
+      </p>
+
+      <button class="mt-6 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-pink-500 hover:to-orange-500 px-5 py-2 text-white font-bold rounded-full shadow-lg transition-all duration-300">
+        Withdraw
+      </button>
+    </div>
+  </div>
+</div>
+
+    <!-- Records Section -->
+    <div class="space-y-4">
+      <h2 class="text-xl font-semibold text-orange-300">Transaction Record</h2>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-4 text-sm text-gray-300">
+        <div>Withdraw Record</div>
+        <div>Start Time: <span class="ml-2">-</span></div>
+        <div>End Time: <span class="ml-2">-</span></div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto bg-white bg-opacity-10 rounded-lg shadow">
+        <table class="w-full table-auto text-sm text-left">
+          <thead class="bg-gray-800 text-orange-300">
+            <tr>
+              <th class="p-3">ID</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Type</th>
+              <th class="p-3">Amount</th>
+              <th class="p-3">Source</th>
+              <th class="p-3">Note</th>
+            </tr>
+          </thead>
+          <tbody class="text-white divide-y divide-gray-700">
+            <tr>
+              <td class="p-3" colspan="7" align="center" class="text-gray-400">no data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

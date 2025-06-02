@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game Marketplace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glow-gradient {
+      background: linear-gradient(135deg, #6a5acd, #00bfff);
+      color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(106, 90, 205, 0.6), 0 0 20px rgba(0, 191, 255, 0.6);
+    }
+    .glow-gradient:hover {
+      box-shadow: 0 0 20px rgba(106, 90, 205, 0.8), 0 0 30px rgba(0, 191, 255, 0.8);
+      transform: scale(1.05);
+    }
+
+    /* Loading overlay styles */
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      background-color: #1a202c; /* Tailwind's bg-gray-900 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    /* Spinner */
+    .spinner {
+      border: 6px solid rgba(255, 255, 255, 0.2);
+      border-top: 6px solid #6a5acd; /* purple-ish */
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+  <!-- Loading Animation Overlay -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="bg-gray-800 shadow p-4 flex flex-wrap justify-between items-center max-w-7xl mx-auto">
+    <div class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 flex-shrink-0">
+      GameBuyX
+    </div>
+
+    <div class="flex items-center gap-4 mt-3 sm:mt-0">
+      <!-- Icons Section -->
+      <div class="flex items-center gap-4 text-white text-xl">
+        <!-- Chat Icon -->
+        <!-- Chat Icon with Badge -->
+      <a href="{{ url_for('chat') }}" title="Chat" class="hover:text-purple-400 transition relative">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-6.219-8.563M21 12a9 9 0 01-18 0c0-.38.027-.757.08-1.127A6.97 6.97 0 003 12c0 1.61.58 3.084 1.54 4.22A4.992 4.992 0 005 21h.01L8 19.667" />
+        </svg>
+        {% if unread_messages > 0 %}
+          <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
+            {{ unread_messages }}
+          </span>
+        {% endif %}
+      </a>
+
+
+        <!-- Notification Icon -->
+        <!-- Notification Icon with Badge -->
+      <a href="{{ url_for('notifications') }}" title="Notifications" class="hover:text-purple-400 transition relative">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.929 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        {% if notification_count > 0 %}
+          <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
+            {{ notification_count }}
+          </span>
+        {% endif %}
+      </a>
+
+
+        <!-- Profile Dropdown -->
+        {% if session.get('username') %}
+          <div class="relative">
+            <button onclick="toggleDropdown()" id="profileBtn" class="hover:text-purple-400 transition focus:outline-none">
+              <!-- Profile Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5.121 17.804A9 9 0 0112 3a9 9 0 016.879 14.804M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-gray-700 text-gray-100 rounded shadow-lg z-50">
+              <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 hover:bg-gray-600">Dashboard</a>
+              {% if user_status == 'approved' %}
+              <a href="{{ url_for('offer_create') }}" class="block px-4 py-2 hover:bg-gray-600">Create Offer</a>
+            {% else %}
+              <a href="{{ url_for('sell') }}" class="block px-4 py-2 hover:bg-gray-600">Sell Item</a>
+            {% endif %}
+
+              <a href="{{ url_for('logout') }}" class="block px-4 py-2 hover:bg-red-600 text-red-400">Logout</a>
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="text-sm sm:text-base text-gray-200 hover:text-purple-400 transition whitespace-nowrap">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative h-[70vh] sm:h-[80vh] flex items-center justify-center text-center text-white overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+      <source src="{{ url_for('static', filename='game-bg.mp4') }}" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+
+    <form method="GET" action="{{ url_for('home') }}" class="z-20 max-w-3xl px-4 w-full">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">Buy &amp; Sell Game Accounts Securely</h1>
+      <p class="text-base sm:text-lg md:text-xl mb-8 drop-shadow">Get access to thousands of gaming accounts and items instantly.</p>
+      <input
+        type="text"
+        name="q"
+        value="{{ request.args.get('q', '') }}"
+        placeholder="Search game accounts..."
+        class="w-full sm:w-3/4 mx-auto p-3 rounded text-black focus:outline-none focus:ring-4 focus:ring-purple-500 transition"
+        aria-label="Search game accounts"
+      />
+    </form>
+  </section>
+
+  <!-- Featured Categories -->
+  <section class="px-4 py-10 max-w-7xl mx-auto">
+    <div class="flex flex-wrap gap-3 justify-center">
+      <button class="glow-gradient px-4 py-2 rounded-full whitespace-nowrap">New Items</button>
+      <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-full transition whitespace-nowrap">Most Views</button>
+      <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-full transition whitespace-nowrap">All</button>
+      <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-full transition whitespace-nowrap">All Games</button>
+      <!-- Add more categories as needed -->
+    </div>
+  </section>
+
+  <!-- Listings -->
+  <section class="px-4 pb-12 max-w-7xl mx-auto">
+    <div id="listings" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {% if offers %}
+        {% for offer in offers %}
+          <a href="{{ url_for('buy_offer', username=offer.username, offer_title=offer.offer_title) }}" class="block">
+            <div class="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-6 shadow-lg flex flex-col justify-between text-white {% if loop.index > 6 %}extra-listing hidden{% endif %}">
+              <div>
+                <h3 class="text-xl font-bold mb-1 truncate">{{ offer.game_type }}</h3>
+                <h4 class="text-lg mb-1 truncate">{{ offer.offer_title }}</h4>
+                <p class="mb-1 text-orange-400 font-semibold">${{ offer.price }}</p>
+                <p class="mb-4 text-gray-300 capitalize truncate">Platform: {{ offer.platform }}</p>
+                <p class="text-sm text-gray-400">Seller: {{ offer.username }}</p>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-gray-400">No offers available.</p>
+      {% endif %}
+    </div>
+
+    {% if offers|length > 6 %}
+      <button id="toggleListings" class="mt-6 mx-auto block px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-full text-white font-semibold focus:outline-none focus:ring-4 focus:ring-purple-500 transition">
+        Show More
+      </button>
+    {% endif %}
+  </section>
+
+  <script>
+    // Hide loading overlay when page fully loads
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('loadingOverlay');
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 500);
+    });
+
+    // Dropdown toggle
+    function toggleDropdown() {
+      const menu = document.getElementById('dropdownMenu');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+      }
+    }
+    // Close dropdown if clicking outside
+    window.addEventListener('click', e => {
+      if (!document.getElementById('profileBtn').contains(e.target)) {
+        document.getElementById('dropdownMenu').classList.add('hidden');
+      }
+    });
+
+    // Show more / Show less listings toggle
+    const toggleBtn = document.getElementById('toggleListings');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        document.querySelectorAll('.extra-listing').forEach(el => {
+          el.classList.toggle('hidden');
+        });
+        toggleBtn.textContent = toggleBtn.textContent === 'Show More' ? 'Show Less' : 'Show More';
+      });
+    }
+  </script>
+</body>
+</html>

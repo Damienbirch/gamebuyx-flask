@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" class="dark transition-colors duration-300">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sell at GAMEBUYX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    @keyframes gradientAnimation { 
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .gradient-animation {
+      background: linear-gradient(45deg, #1c92d2, #f2fcfe);
+      background-size: 400% 400%;
+      animation: gradientAnimation 15s ease infinite;
+    }
+    .dark .gradient-animation {
+      background: linear-gradient(45deg, #0f2027, #203a43, #2c5364);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-md dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="text-3xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 transition-all">GAMEBUYX</a>
+      <nav class="hidden md:flex items-center space-x-6 text-gray-700 dark:text-gray-300 text-sm">
+        <a href="/templates/home.html" class="hover:text-blue-600 dark:hover:text-blue-400 transform hover:scale-105 transition-all">Home</a>
+        <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transform hover:scale-105 transition-all">Support</a>
+      </nav>
+      <div class="flex items-center space-x-4 text-sm text-gray-700 dark:text-gray-200">
+        {% if username %}
+          <span class="font-semibold">{{ username }}</span>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="hover:text-blue-600 dark:hover:text-blue-400">Login</a>
+        {% endif %}
+        <!-- Dark Mode Toggle -->
+        <!-- <button onclick="toggleDarkMode()" class="ml-4 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded transition">Toggle Dark</button> -->
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="gradient-animation text-white py-20">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h1 class="text-5xl font-extrabold mb-4">Sell at GAMEBUYX</h1>
+      <p class="text-lg mb-6">Become a seller and start earning today! Sell your in-game items and enjoy fast payments.</p>
+      <a href="{{ url_for('member_application') }}" class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">Start Selling</a>
+    </div>
+  </section>
+
+  <!-- SELLING BENEFITS -->
+  <section class="py-12 px-4 text-center bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-semibold text-blue-600 dark:text-blue-400 mb-6">Why Sell at GAMEBUYX?</h2>
+      <div class="grid md:grid-cols-4 gap-8">
+        {% for benefit in [
+          'Sell VBucks in Hours',
+          'Seller Trade Protection',
+          'Reach Global Consumers',
+          'Next Day Payments'
+        ] %}
+        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+          <h3 class="text-xl font-semibold mb-4">{{ benefit }}</h3>
+          <p>Get the best tools and support for selling your in-game assets.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- SELLING OPTIONS -->
+  <section class="py-12 px-4 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-3xl font-semibold mb-6">Sell Your V-Bucks</h2>
+      <p class="mb-6">GameBuyX is the best platform for selling V-bucks...</p>
+      <p class="mb-6">Use Player Trade, Comfort Trade, or API connection to manage efficiently.</p>
+      <a href="#" class="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">Start Selling Now</a>
+    </div>
+  </section>
+
+  <!-- SELL OTHER PRODUCTS -->
+  <section class="py-12 px-4 text-center bg-gray-100 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-semibold mb-6">Sell Other Digital Products</h2>
+      <p class="mb-6">Sell gift cards, game keys, mobile top-ups, and more.</p>
+      <p class="mb-6">Start earning from in-demand digital products now!</p>
+      <a href="#" class="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">Sell Other Products</a>
+    </div>
+  </section>
+
+  <!-- PAYMENT OPTIONS -->
+  <section class="py-12 px-4 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-3xl font-semibold mb-6">Payment Methods</h2>
+      <p class="mb-6">GAMEBUYX supports fast, secure payments via:</p>
+      <div class="flex justify-center space-x-8 mb-6 text-blue-600 dark:text-blue-400">
+        <i class="fab fa-visa text-3xl hover:text-blue-800"></i>
+        <i class="fab fa-cc-mastercard text-3xl hover:text-blue-800"></i>
+        <i class="fab fa-apple text-3xl hover:text-blue-800"></i>
+        <i class="fab fa-google-pay text-3xl hover:text-blue-800"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-blue-600 dark:bg-gray-950 text-white py-6">
+    <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+      <p>&copy; 2003-2025, Merc&D Technology Co., Limited All Rights Reserved.</p>
+      <div class="flex justify-center space-x-6 mt-4">
+        <a href="#" class="hover:text-gray-200">Terms of Service</a>
+        <a href="#" class="hover:text-gray-200">Privacy Notice</a>
+        <a href="#" class="hover:text-gray-200">Help Center</a>
+        <a href="#" class="hover:text-gray-200">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Dark Mode Script -->
+  <script>
+    // const html = document.documentElement;
+    // const storedTheme = localStorage.getItem("theme");
+
+    // if (storedTheme === "dark") {
+    //   html.classList.add("dark");
+    // }
+
+    // function toggleDarkMode() {
+    //   html.classList.toggle("dark");
+    //   localStorage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
+    // }
+
+  const html = document.documentElement;
+  const storedTheme = localStorage.getItem("theme");
+
+  if (storedTheme === "light") {
+    html.classList.remove("dark");
+  } else {
+    html.classList.add("dark"); // Default is dark
+  }
+
+  function toggleDarkMode() {
+    html.classList.toggle("dark");
+    localStorage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
+  }
+
+  </script>
+</body>
+</html>

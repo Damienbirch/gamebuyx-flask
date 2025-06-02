@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Notifications</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-4 flex justify-between items-center">
+      Your Notifications 
+      <span class="text-sm bg-red-600 text-white rounded-full px-3 py-1 animate-pulse">{{ unread_count }}</span>
+    </h1>
+
+    <div class="space-y-4">
+      {% if notifications %}
+        {% for note in notifications %}
+          <a href="{{ url_for('view_notification', index=loop.index0) }}" class="block transform hover:scale-105 transition duration-200">
+            <div class="bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition {% if note.is_read == 'no' %}border-l-4 border-blue-500{% endif %}">
+              <p class="font-semibold">{{ note.message }}</p>
+              <p class="text-gray-400 text-sm mt-1">{{ note.timestamp }}</p>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        <p>No notifications found.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

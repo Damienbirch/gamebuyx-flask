@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat Interface</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Scrollbar styles */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #4B5563;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #2563EB; /* Blue on hover */
+    }
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #4B5563 transparent;
+    }
+
+    /* Fade & slide in message animation */
+    @keyframes fadeSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Glow animation for buttons */
+    @keyframes glowPulse {
+      0%, 100% {
+        box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.7);
+      }
+      50% {
+        box-shadow: 0 0 16px 6px rgba(59, 130, 246, 1);
+      }
+    }
+
+    /* Button glowing effect */
+    .glow-btn {
+      animation: glowPulse 2.5s infinite ease-in-out;
+      transition: background-color 0.3s ease;
+    }
+    .glow-btn:hover {
+      background-color: #1E40AF; /* Darker blue */
+      box-shadow: 0 0 20px 8px rgba(59, 130, 246, 0.9);
+    }
+
+    /* Glowing link effect */
+    .glow-link {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .glow-link::before {
+      content: "";
+      position: absolute;
+      top: -4px; bottom: -4px; left: -6px; right: -6px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px 3px rgba(37, 99, 235, 0.7);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .glow-link:hover::before,
+    .glow-link:focus::before {
+      opacity: 1;
+    }
+    .glow-link:hover,
+    .glow-link:focus {
+      color: #3B82F6;
+      outline: none;
+    }
+
+    /* Reload overlay */
+    #reloadOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(31, 41, 55, 0.85); /* bg-gray-900 at 85% */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    #reloadOverlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Spinner */
+    .spinner {
+      border: 4px solid rgba(59, 130, 246, 0.3);
+      border-top: 4px solid #3B82F6;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen font-sans flex flex-col">
+
+  <!-- Reload overlay -->
+  <div id="reloadOverlay" aria-hidden="true">
+    <div class="spinner" role="status" aria-label="Loading"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-gray-800 shadow p-4 flex justify-between items-center sticky top-0 z-20">
+    <a href="{{ url_for('chat') }}"><h1 class="text-xl font-semibold tracking-wide select-none glow-link">Messages</h1></a>
+    <a href="{{ url_for('home') }}"
+       id="backBtn"
+       class="bg-gray-700 hover:bg-gray-600 text-sm px-4 py-2 rounded transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 glow-btn">
+      Back
+    </a>
+  </header>
+
+  <!-- Main Chat Layout -->
+  <div class="flex flex-1 flex-col md:flex-row h-[calc(100vh-64px)] md:h-[90vh]">
+
+    <!-- Left Sidebar (1/4 width on md+, full width on mobile) -->
+    <aside class="bg-gray-800 overflow-y-auto border-b border-gray-700 md:border-b-0 md:border-r md:w-1/4 p-4 space-y-3 max-h-72 md:max-h-full">
+      <h2 class="text-lg font-bold mb-3 select-none">Chats</h2>
+      {% for user in chat_users %}
+        <a href="{{ url_for('chat_with_user', receiver_username=user.username) }}"
+           class="block p-3 rounded bg-gray-700 hover:bg-gray-600 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 glow-link">
+          <div class="font-medium truncate" title="{{ user.username }}">{{ user.username }}</div>
+          <div class="text-sm text-gray-400 truncate" title="{{ user.last_text }}">
+            {{ user.last_text[:30] }}{% if user.last_text|length > 30 %}...{% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </aside>
+
+    <!-- Right Chat View (3/4 width on md+, full width on mobile) -->
+    <section class="flex-1 flex flex-col">
+
+      <!-- Chat Header -->
+      <div class="bg-gray-800 p-4 border-b border-gray-700 sticky top-0 z-10">
+        <h2 class="text-lg font-semibold select-none glow-link">
+          Chat with
+          {% if current_user == "admin" and other_username == "Your Inbox" %}
+            Gamebuyx
+          {% else %}
+            {{ other_username }}
+          {% endif %}
+        </h2>
+      </div>
+
+      <!-- Chat Messages -->
+      <main id="chatBox" class="flex-1 p-6 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent" style="scroll-behavior: smooth;">
+        {% if messages %}
+          {% for msg in messages %}
+            <div
+              class="max-w-[75%] p-4 rounded-lg text-sm leading-relaxed break-words
+                     {{ 'bg-blue-600 text-white self-end ml-auto animate-fadeSlideIn' if msg.sender == current_user else 'bg-gray-700 text-white self-start mr-auto animate-fadeSlideIn' }}"
+              style="animation: fadeSlideIn 0.4s ease forwards;">
+              <p class="whitespace-pre-wrap">{{ msg.text }}</p>
+              <div class="text-xs text-gray-300 mt-2 select-none">
+                {{ msg.sender }} | {{ msg.timestamp }}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-center text-gray-400 select-none">No messages yet.</p>
+        {% endif %}
+      </main>
+
+      <!-- Send Message Form -->
+      <form method="POST" action="{{ url_for('chat_with_user', receiver_username=other_username) }}"
+            class="p-4 max-w-4xl mx-auto w-full flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+        <input type="text" name="text" placeholder="Type a message..."
+               class="flex-1 rounded px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+               autocomplete="off" required />
+        <button type="submit"
+                class="bg-blue-600 px-5 py-2 rounded hover:bg-blue-700 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 glow-btn">
+          Send
+        </button>
+      </form>
+
+    </section>
+
+  </div>
+
+  <!-- Auto Scroll Script -->
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    if (chatBox) {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Reload animation overlay control
+    const reloadOverlay = document.getElementById('reloadOverlay');
+
+    // Function to show the loading overlay
+    function showLoading() {
+      reloadOverlay.classList.add('active');
+    }
+
+    // Attach click handlers to all links that reload the page (Back and chat users)
+    document.querySelectorAll('a[href]').forEach(link => {
+      // Only add if link is internal (adjust if your app structure is different)
+      if (link.href.startsWith(window.location.origin)) {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          showLoading();
+          // delay to show loading effect before navigation
+          setTimeout(() => {
+            window.location.href = link.href;
+          }, 200);
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

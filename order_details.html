@@ -1,0 +1,57 @@
+<!-- templates/order_details.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .order-box {
+            border: 2px solid #000;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+        }
+        .delivered {
+            color: green;
+            font-weight: bold;
+        }
+        .pending {
+            color: orange;
+            font-weight: bold;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn:disabled {
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+    <h1>Order Details</h1>
+    <div class="order-box">
+        <p><strong>Order ID:</strong> {{ order['order_id'] }}</p>
+        <p><strong>Offer Title:</strong> {{ order['offer_title'] }}</p>
+        <p><strong>Buyer:</strong> {{ order['buyer_username'] }}</p>
+        <p><strong>Seller:</strong> {{ order['seller_username'] }}</p>
+        <p><strong>Status:</strong> 
+            <span class="{{ order['status'] }}">{{ order['status']|capitalize }}</span>
+        </p>
+        {% if order['status'] == 'pending' %}
+            <form method="POST" action="/confirm-delivery/{{ order['order_id'] }}">
+                <button type="submit" class="btn">Confirm Delivery</button>
+            </form>
+        {% else %}
+            <p><strong>Order has been delivered.</strong></p>
+        {% endif %}
+    </div>
+</body>
+</html>

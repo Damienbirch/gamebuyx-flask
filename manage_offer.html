@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Offers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6 min-h-screen">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-orange-400">Manage Offers</h1>
+      <a href="/offer_create">
+        <button class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-md font-semibold shadow-md transition duration-300">
+          + New Offer
+        </button>
+      </a>
+    </div>
+
+    <!-- Offers Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto border-collapse rounded-lg overflow-hidden bg-white bg-opacity-5 backdrop-blur-sm">
+        <thead class="bg-gray-800 text-orange-300">
+          <tr>
+            <th class="p-4 text-left">Offer Name</th>
+            <th class="p-4 text-left">Game</th>
+            <th class="p-4">Delivery Time</th>
+            <th class="p-4">Status</th>
+            <th class="p-4">Duration</th>
+            <th class="p-4">Stock</th>
+            <th class="p-4">Sales</th>
+            <th class="p-4">Price</th>
+            <th class="p-4">Action</th>
+          </tr>
+        </thead>
+        <tbody class="text-white divide-y divide-gray-700">
+          {% for offer in offers %}
+          <tr class="hover:bg-gray-800 transition">
+            <td class="p-4">{{ offer.offer_name }}</td>
+            <td class="p-4">{{ offer.game }}</td>
+            <td class="p-4 text-center">{{ offer.delivery_time }}</td>
+            <td class="p-4 text-center">{{ offer.status }}</td>
+            <td class="p-4 text-center">{{ offer.duration }}</td>
+            <td class="p-4 text-center">{{ offer.stock }}</td>
+            <td class="p-4 text-center">{{ offer.sales }}</td>
+            <td class="p-4 text-center">${{ offer.price }}</td>
+            <td class="p-4 text-center flex gap-2 justify-center">
+              <a href="{{ url_for('edit_offer', offer_title=offer.offer_title) }}">
+                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">Edit</button>
+              </a>
+              <form method="POST" action="{{ url_for('delete_offer', offer_title=offer.offer_title) }}">
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="9" class="text-center p-6 text-gray-400">No offers found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Total Count -->
+    <div class="text-right text-gray-400 text-sm mt-4">
+      Total: {{ offers|length }}
+    </div>
+  </div>
+</body>
+</html>

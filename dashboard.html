@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ loading: true, storeOpen: false }" x-init="setTimeout(() => loading = false, 1000)">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
+  <style>
+    ::selection {
+      background-color: #ec4899;
+      color: black;
+    }
+
+    .glow-btn {
+      background: #ec4899;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 9999px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #ec4899, 0 0 20px #ec4899;
+    }
+
+    .glow-btn:hover {
+      background-color: #db2777;
+      box-shadow: 0 0 15px #ec4899, 0 0 30px #ec4899;
+    }
+
+    .glass {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white font-sans">
+
+  <!-- Loader -->
+  <div x-show="loading" x-cloak class="fixed inset-0 flex items-center justify-center bg-black z-50 transition-opacity duration-500">
+    <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-pink-500 border-solid"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="w-full bg-white/5 backdrop-blur-md shadow-md border-b border-white/10 px-4 md:px-8 py-4 flex justify-between items-center">
+    <div class="text-2xl font-bold text-pink-400 animate-pulse">GameBuyX</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="{{ url_for('home') }}" class="hover:text-pink-300 transition">Home</a>
+      <a href="#" class="hover:text-pink-300 transition">Browse</a>
+      {% if session.get('username') %}
+      <div class="relative group">
+        <button class="font-semibold px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition">
+          {{ session['username'] }}
+        </button>
+        <div class="absolute mt-2 right-0 w-40 bg-white text-gray-800 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-50">
+          <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
+          <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-red-600 hover:bg-red-100">Logout</a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- Layout -->
+  <div class="flex flex-col md:flex-row">
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-1/4 bg-white/5 border-r border-white/10 p-6 space-y-6">
+      <div class="space-y-2">
+        <button @click="storeOpen = !storeOpen" class="w-full text-left font-bold py-2 px-4 bg-pink-600 rounded-lg hover:bg-pink-700 transition duration-300 shadow-lg text-white">
+          Store Setting
+        </button>
+        <div x-show="storeOpen" x-transition class="space-y-1 pl-4 text-sm">
+          <a href="#" class="block py-1 hover:text-pink-300">Sold Orders</a>
+          <a href="{{ url_for('manage_offers') }}" class="block py-1 hover:text-pink-300">Offers</a>
+          <a href="#" class="block py-1 hover:text-pink-300">Store Setting</a>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <a href="#" class="block font-semibold hover:text-pink-300">Purchased Orders</a>
+        <a href="#" class="block font-semibold hover:text-pink-300">My Balance</a>
+        <a href="#" class="block font-semibold hover:text-pink-300">Settings</a>
+        <a href="{{ url_for('chat') }}" class="block font-semibold hover:text-pink-300">Chat</a>
+        <a href="#" class="block font-semibold hover:text-pink-300">Notification</a>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="w-full md:w-3/4 p-6">
+      <div class="glass w-full max-w-5xl mx-auto">
+
+        <h2 class="text-3xl font-bold mb-6 text-pink-400">Account Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium mb-1">Email</label>
+            <input type="email" name="email" value="{{ profile_data.email }}" placeholder="Enter email"
+              class="w-full px-4 py-2 rounded-xl {% if profile_data.email %}bg-gray-100 text-black cursor-not-allowed{% else %}bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400{% endif %}"
+              {% if profile_data.email %}readonly{% endif %}>
+          </div>
+
+          <!-- Gender -->
+          <div>
+            <label class="block text-sm font-medium mb-1">Gender</label>
+            <select name="gender"
+              class="w-full px-4 py-2 rounded-xl {% if profile_data.gender %}bg-gray-100 text-black cursor-not-allowed{% else %}bg-white/10 text-black border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400{% endif %}"
+              {% if profile_data.gender %}disabled{% endif %}>
+              <option value="" {% if not profile_data.gender %}selected{% endif %} disabled>Select Gender</option>
+              <option value="male" {% if profile_data.gender == 'male' %}selected{% endif %}>Male</option>
+              <option value="female" {% if profile_data.gender == 'female' %}selected{% endif %}>Female</option>
+              <option value="other" {% if profile_data.gender == 'other' %}selected{% endif %}>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <h2 class="text-3xl font-bold mb-6 text-pink-400">Personal Information</h2>
+        <form method="POST" action="{{ url_for('save_profile') }}">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Username -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Username</label>
+              <input type="text" value="{{ session['username'] }}" class="w-full px-4 py-2 rounded-xl bg-gray-100 text-black cursor-not-allowed" readonly>
+            </div>
+
+            <!-- First Name -->
+            <div>
+              <label class="block text-sm font-medium mb-1">First Name</label>
+              <input type="text" name="first_name" value="{{ profile_data.first_name }}" placeholder="Enter first name"
+                class="w-full px-4 py-2 rounded-xl {% if profile_data.first_name %}bg-gray-100 text-black cursor-not-allowed{% else %}bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400{% endif %}"
+                {% if profile_data.first_name %}readonly{% endif %}>
+            </div>
+
+            <!-- Last Name -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Last Name</label>
+              <input type="text" name="last_name" value="{{ profile_data.last_name }}" placeholder="Enter last name"
+                class="w-full px-4 py-2 rounded-xl {% if profile_data.last_name %}bg-gray-100 text-black cursor-not-allowed{% else %}bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400{% endif %}"
+                {% if profile_data.last_name %}readonly{% endif %}>
+            </div>
+
+            <!-- Birthday -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Birthday</label>
+              <input type="date" name="birthday" value="{{ profile_data.birthday }}"
+                class="w-full px-4 py-2 rounded-xl {% if profile_data.birthday %}bg-gray-100 text-black cursor-not-allowed{% else %}bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400{% endif %}"
+                {% if profile_data.birthday %}readonly{% endif %}>
+            </div>
+
+            <!-- Preferred Contact Method -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Preferred Contact Method</label>
+              <select name="contact_method"
+                class="w-full px-4 py-2 rounded-xl {% if profile_data.contact_method %}bg-gray-100 text-black cursor-not-allowed{% else %}bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400{% endif %}"
+                {% if profile_data.contact_method %}disabled{% endif %}>
+                <option value="" {% if not profile_data.contact_method %}selected{% endif %} disabled>Select</option>
+                <option value="telegram" {% if profile_data.contact_method == 'telegram' %}selected{% endif %}>Telegram</option>
+                <option value="whatsapp" {% if profile_data.contact_method == 'whatsapp' %}selected{% endif %}>WhatsApp</option>
+                <option value="discord" {% if profile_data.contact_method == 'discord' %}selected{% endif %}>Discord</option>
+              </select>
+            </div>
+
+            <!-- Contact Value -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Contact</label>
+              <input type="text" name="contact_value" value="{{ profile_data.contact_value }}" placeholder="Enter contact"
+                class="w-full px-4 py-2 rounded-xl {% if profile_data.contact_value %}bg-gray-100 text-black cursor-not-allowed{% else %}bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400{% endif %}"
+                {% if profile_data.contact_value %}readonly{% endif %}>
+            </div>
+          </div>
+            <div class="mt-6 text-right">
+    <button type="submit" class="glow-btn">Save</button>
+  </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

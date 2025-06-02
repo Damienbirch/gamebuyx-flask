@@ -1,0 +1,62 @@
+<!-- templates/sold_orders.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sold Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .delivered {
+            color: green;
+        }
+        .pending {
+            color: orange;
+        }
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Orders You've Sold</h1>
+    {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Offer Title</th>
+                    <th>Buyer</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order['order_id'] }}</td>
+                    <td>{{ order['offer_title'] }}</td>
+                    <td>{{ order['buyer_username'] }}</td>
+                    <td class="{{ order['status'] }}">{{ order['status']|capitalize }}</td>
+                    <td><a href="/order/{{ order['order_id'] }}">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No orders found.</p>
+    {% endif %}
+</body>
+</html>

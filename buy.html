@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buy Game Offer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <script>
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-blue-600 to-purple-700 dark:from-gray-900 dark:to-black min-h-screen flex flex-col items-center p-4 sm:p-6">
+
+  <!-- Main Offer Container -->
+  <main class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-4 sm:p-6 md:p-8 max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+
+    <!-- Game Info -->
+    <section class="lg:col-span-2 flex flex-col justify-center space-y-4 sm:space-y-6">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
+        🎮 Game Title: <span class="text-indigo-600 dark:text-indigo-400">{{ title }}</span>
+      </h1>
+      <p class="text-gray-700 dark:text-gray-300 text-base sm:text-lg leading-relaxed">
+        <strong>Description:</strong> {{ description }}
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 dark:text-gray-300 text-sm sm:text-md font-medium">
+        <p><strong>Level:</strong> {{ level }}</p>
+        <p><strong>Delivery Method:</strong> {{ delivery_method }}</p>
+        <p><strong>Platform:</strong> {{ platform }}</p>
+      </div>
+    </section>
+
+    <!-- Purchase Box -->
+    <aside class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-inner flex flex-col justify-between">
+      <div class="space-y-4 sm:space-y-6">
+        <div class="flex flex-wrap justify-between items-center gap-4 w-full">
+          <p class="text-lg text-gray-700 dark:text-gray-200 font-semibold">Stock Available:</p>
+          <div class="flex items-center space-x-3">
+            <span class="text-green-600 dark:text-green-400 font-extrabold text-xl">{{ stock }}</span>
+            <!-- Quantity Selector -->
+            <div class="flex items-center space-x-2 bg-white dark:bg-gray-700 rounded-full shadow px-3 py-1">
+              <button id="decreaseQty" class="text-gray-700 dark:text-gray-300 font-bold text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition">−</button>
+              <input id="quantityInput" type="number" min="1" max="{{ stock }}" value="1" class="w-12 bg-transparent text-center text-gray-900 dark:text-white font-semibold focus:outline-none" readonly />
+              <button id="increaseQty" class="text-gray-700 dark:text-gray-300 font-bold text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white">
+            💲 Price: ${{ price_with_fee }}
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">(Includes fee)</p>
+        </div>
+      </div>
+
+      <button id="flutterwaveBtn" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-bold py-3 rounded-2xl transition shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-700">
+        Buy Now
+      </button>
+      <a href="{{ url_for('chat_with_user', receiver_username=seller_username) }}"
+   class="mt-4 w-full inline-block text-center bg-gray-200 hover:bg-gray-300 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-indigo-800 dark:text-white font-semibold py-3 rounded-2xl transition shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-700">
+  💬 Chat Seller
+</a>
+
+    </aside>
+
+    {% if image_url %}
+    <div class="mt-6 lg:col-span-3">
+      <img src="{{ url_for('static', filename='uploads/' + image_url) }}" alt="Offer Image" class="rounded-xl shadow-md w-full h-auto max-h-96 object-cover" />
+    </div>
+    {% endif %}
+  </main>
+
+  <!-- Seller Info -->
+  <section class="max-w-6xl w-full mt-8 sm:mt-10 bg-white dark:bg-gray-900 p-4 sm:p-6 md:p-8 rounded-3xl shadow-2xl text-gray-800 dark:text-gray-200">
+    <h3 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-5 flex items-center space-x-3">
+      <span>🧑</span><span>Seller Information</span>
+    </h3>
+    <div class="flex flex-col sm:flex-row sm:space-x-12 text-base sm:text-lg font-medium">
+      <p><strong>Username:</strong>
+        <a href="{{ url_for('seller_profile', username=seller_username) }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">
+          {{ seller_username }}
+        </a>
+      </p>
+      <p><strong>Reviews:</strong> {{ review_count }} ⭐</p>
+    </div>
+  </section>
+
+  <script>
+    const qtyInput = document.getElementById('quantityInput');
+    const increaseBtn = document.getElementById('increaseQty');
+    const decreaseBtn = document.getElementById('decreaseQty');
+    const maxStock = Number({{ stock|int }});
+
+    increaseBtn.addEventListener('click', () => {
+      let current = Number(qtyInput.value);
+      if (current < maxStock) {
+        qtyInput.value = current + 1;
+      }
+    });
+
+    decreaseBtn.addEventListener('click', () => {
+      let current = Number(qtyInput.value);
+      if (current > 1) {
+        qtyInput.value = current - 1;
+      }
+    });
+
+    document.getElementById('flutterwaveBtn').addEventListener('click', () => {
+      const quantity = Number(qtyInput.value);
+      const price = {{ price_with_fee|tojson }};
+      const title = {{ title|tojson }};
+      const description = {{ description|tojson }};
+
+      const total = price * quantity;
+
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK-4d2f41486058767568a0b0df6a20f360-X",
+        tx_ref: "tx_" + Date.now(),
+        amount: total,
+        currency: "USD",
+        payment_options: "card, mobilemoney, ussd",
+        customer: {
+          email: "{{ user_email|e }}",
+          name: "{{ seller_username|e }}"
+        },
+        customizations: {
+          title: title,
+          description: description,
+          logo: "/static/banner1.jpg"
+        },
+        callback: function (response) {
+          console.log(response);
+          alert('Payment successful');
+          window.location.href = "/order-success";
+        },
+        onclose: function () {
+          console.log('Payment closed');
+        },
+      });
+    });
+  </script>
+</body>
+</html>

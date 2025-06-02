@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-300">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - GameBuyX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+<!-- HEADER -->
+<header class="bg-white dark:bg-gray-800 shadow-sm transition-colors">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <!-- Left -->
+    <div class="flex items-center space-x-6">
+      <a href="{{ url_for('home') }}" class="text-2xl font-bold text-blue-600 dark:text-blue-400">GameBuyX</a>
+      <nav class="hidden md:flex space-x-6 text-sm text-gray-700 dark:text-gray-300">
+        <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400">Browse</a>
+        <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400">Top Up</a>
+        <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400">Sell</a>
+      </nav>
+    </div>
+
+    <!-- Center -->
+    <div class="flex-1 mx-6 hidden md:block">
+      <input type="text" placeholder="Search for games, accounts..."
+        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm bg-white dark:bg-gray-700 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none">
+    </div>
+
+    <!-- Right -->
+    <div class="flex items-center space-x-4 text-sm">
+      <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400">🛒</a>
+      <select id="languageSelector" class="border px-2 py-1 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+      </select>
+      <a href="{{ url_for('register') }}"class="text-blue-600 dark:text-blue-400 hover:underline">Register</button></a>
+      <button onclick="toggleDarkMode()" class="ml-2 text-gray-500 dark:text-gray-300 hover:text-black dark:hover:text-white">🌓</button>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN BOX -->
+<div class="min-h-screen flex items-center justify-center px-4">
+  <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md mt-8 transition-all duration-500">
+    <div class="text-center mb-6">
+      <h2 id="signInTitle" class="text-2xl font-bold">Sign in to continue</h2>
+    </div>
+
+    <form class="space-y-4" action="{{ url_for('login') }}" method="POST">
+      <div>
+        <label for="username" id="labelUsername" class="block text-sm mb-1">Username or Email</label>
+        <input name="username" type="text" placeholder="Your username or email..." class="w-full px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+      </div>
+      <div>
+        <label for="password" id="labelPassword" class="block text-sm mb-1">Password</label>
+        <input name="password" type="password" placeholder="••••••••" class="w-full px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <a id="forgotLink" href="#" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Forgot Password?</a>
+      </div>
+
+      <button id="signInButton" type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition">
+        Sign In
+      </button>
+    </form>
+
+    <div class="my-4 flex items-center">
+      <hr class="flex-grow border-t border-gray-300 dark:border-gray-600">
+      <span id="orText" class="mx-2 text-gray-500 dark:text-gray-400 text-sm">Or</span>
+      <hr class="flex-grow border-t border-gray-300 dark:border-gray-600">
+    </div>
+
+    <div class="space-y-2">
+      <button class="w-full py-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord" class="h-5 w-5 mr-2">
+        <span id="discordText">Sign In with Discord</span>
+      </button>
+      <button class="w-full py-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" class="h-5 w-5 mr-2">
+        <span id="facebookText">Sign In with Facebook</span>
+      </button>
+    </div>
+
+    <p class="text-sm text-center text-gray-600 dark:text-gray-400 mt-6">
+      <span id="noAccountText">Don't have an account?</span>
+      <a href="{{ url_for('register') }}" class="text-blue-600 dark:text-blue-400 hover:underline">Sign Up Here</a>
+    </p>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<!-- <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 transition-opacity duration-300">
+  <div id="modalContent" class="bg-blue-600 rounded-lg shadow-lg w-full max-w-3xl flex overflow-hidden relative opacity-0 scale-95 transition-transform duration-300">
+    <button onclick="hideModal()" class="absolute top-3 right-3 text-white hover:text-gray-200 text-2xl">&times;</button>
+
+    <div class="w-1/2 hidden md:block bg-gray-100">
+      <img src="/static/banner.jpg" alt="Visual" class="w-full h-full object-cover">
+    </div>
+
+    <div class="w-full md:w-1/2 p-8">
+      <h2 class="text-2xl text-white font-bold mb-6">Sign up</h2>
+
+      <a href="{{ url_for('register') }}"><button class="w-full flex items-center border border-gray-300 bg-white px-4 py-2 rounded-md mb-3 hover:bg-gray-100">
+        <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" class="w-5 h-5 mr-3" alt="Email">
+        Sign up with Email
+      </button></a>
+
+      <button class="w-full flex items-center border border-gray-300 bg-white px-4 py-2 rounded-md mb-3 hover:bg-gray-100">
+        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" class="w-5 h-5 mr-3" alt="Google">
+        Sign up with Google
+      </button>
+
+      <button class="w-full flex items-center border border-gray-300 bg-white px-4 py-2 rounded-md mb-3 hover:bg-gray-100">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" class="w-5 h-5 mr-3" alt="Facebook">
+        Sign up with Facebook
+      </button>
+
+      <button class="w-full flex items-center border border-gray-300 bg-white px-4 py-2 rounded-md hover:bg-gray-100">
+        <img src="https://cdn-icons-png.flaticon.com/512/3059/3059446.png" class="w-5 h-5 mr-3" alt="Phone">
+        Sign up with Phone Number
+      </button>
+
+      <div class="flex items-start text-sm mt-4">
+        <input type="checkbox" class="mt-1 mr-2" id="agree">
+        <label for="agree" class="text-white">I agree to receive emails about offers and updates.</label>
+      </div>
+
+      <p class="text-sm text-white text-center mt-4">
+        Already have an account? <a href="{{ url_for('login') }}" class="hover:underline">Sign In Here</a>
+      </p>
+    </div>
+  </div>
+</div> -->
+
+<!-- SCRIPTS -->
+<script>
+  const translations = {
+    en: {
+      signInTitle: "Sign in to continue",
+      username: "Username or Email",
+      password: "Password",
+      forgot: "Forgot Password?",
+      or: "Or",
+      discord: "Sign In with Discord",
+      facebook: "Sign In with Facebook",
+      noAccount: "Don't have an account?",
+      signUpHere: "Sign Up Here",
+      signIn: "Sign In",
+    },
+    fr: {
+      signInTitle: "Connectez-vous pour continuer",
+      username: "Nom d'utilisateur ou Email",
+      password: "Mot de passe",
+      forgot: "Mot de passe oublié ?",
+      or: "Ou",
+      discord: "Se connecter avec Discord",
+      facebook: "Se connecter avec Facebook",
+      noAccount: "Vous n'avez pas de compte ?",
+      signUpHere: "Inscrivez-vous ici",
+      signIn: "Se connecter",
+    }
+  };
+
+  function applyLanguage(lang) {
+    const t = translations[lang];
+    document.getElementById("signInTitle").textContent = t.signInTitle;
+    document.getElementById("labelUsername").textContent = t.username;
+    document.getElementById("labelPassword").textContent = t.password;
+    document.getElementById("forgotLink").textContent = t.forgot;
+    document.getElementById("orText").textContent = t.or;
+    document.getElementById("discordText").textContent = t.discord;
+    document.getElementById("facebookText").textContent = t.facebook;
+    document.getElementById("noAccountText").textContent = t.noAccount;
+    document.getElementById("signUpLink").textContent = t.signUpHere;
+    document.getElementById("signInButton").textContent = t.signIn;
+  }
+
+  document.getElementById("languageSelector").addEventListener("change", function () {
+    applyLanguage(this.value);
+  });
+
+  applyLanguage("en");
+
+  function showRegisterModal() {
+    const modal = document.getElementById('signupModal');
+    const content = document.getElementById('modalContent');
+    modal.style.display = 'flex';
+    setTimeout(() => {
+      content.classList.remove('opacity-0', 'scale-95');
+      content.classList.add('opacity-100', 'scale-100');
+    }, 50);
+  }
+
+  function hideModal() {
+    const modal = document.getElementById('signupModal');
+    const content = document.getElementById('modalContent');
+    content.classList.remove('opacity-100', 'scale-100');
+    content.classList.add('opacity-0', 'scale-95');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  }
+
+  document.getElementById('signUpLink').addEventListener('click', function (event) {
+    event.preventDefault();
+    showRegisterModal();
+  });
+
+  function toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+  }
+</script>
+
+</body>
+</html>

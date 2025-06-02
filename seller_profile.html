@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ seller_username }}'s Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class', // use class-based dark mode toggling
+      theme: {
+        extend: {
+          colors: {
+            primary: '#7c3aed', // violet
+            secondary: '#4f46e5', // indigo
+            accent: '#9333ea', // purple
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease-in-out forwards',
+            'slide-up': 'slideUp 0.5s ease-out forwards',
+            'pulse-slow': 'pulse 3s ease-in-out infinite',
+            'spin-slow': 'spin 3s linear infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            slideUp: {
+              '0%': { opacity: 0, transform: 'translateY(20px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Active tab style */
+    .tab-button.active {
+      background-color: rgba(124, 58, 237, 0.2);
+      border-bottom: 3px solid #7c3aed;
+      font-weight: 600;
+    }
+
+    /* Scrollbar styles for overflow containers */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(124, 58, 237, 0.6);
+      border-radius: 4px;
+    }
+
+    /* Loading Overlay */
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(31, 41, 55, 0.9); /* gray-800 with opacity */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    #loadingOverlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    /* Spinner style */
+    .spinner {
+      border: 6px solid transparent;
+      border-top: 6px solid #7c3aed;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white min-h-screen p-4 md:p-8 font-sans">
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Seller Header -->
+  <header
+    class="bg-gradient-to-r from-primary to-secondary p-6 rounded-3xl shadow-xl mb-10 text-center max-w-4xl mx-auto animate-fade-in"
+  >
+    <h1 class="text-4xl font-extrabold tracking-tight drop-shadow-lg">{{ seller_username }}</h1>
+    <p class="text-sm text-gray-300 mt-2">
+      Registered on: <span class="font-semibold">{{ registration_date }}</span>
+    </p>
+    <div
+      class="flex flex-col sm:flex-row justify-center gap-6 mt-6 max-w-md mx-auto sm:max-w-none"
+    >
+      <div
+        class="bg-black bg-opacity-30 px-6 py-3 rounded-2xl shadow-md hover:bg-opacity-50 transition cursor-default"
+      >
+        <p class="text-sm text-gray-400">Total Offers</p>
+        <p class="text-2xl font-semibold text-primary">{{ total_offers }}</p>
+      </div>
+      <div
+        class="bg-black bg-opacity-30 px-6 py-3 rounded-2xl shadow-md hover:bg-opacity-50 transition cursor-default"
+      >
+        <p class="text-sm text-gray-400">Total Reviews</p>
+        <p class="text-2xl font-semibold text-primary">{{ total_reviews }}</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Info Box -->
+  <section
+    class="bg-gradient-to-r from-secondary to-primary p-5 rounded-2xl text-center mb-8 shadow-lg max-w-3xl mx-auto animate-slide-up"
+  >
+    <p class="text-sm sm:text-base text-gray-200 max-w-xl mx-auto">
+      Explore verified offers and honest seller reviews before making your
+      purchase. Stay informed and shop smart.
+    </p>
+  </section>
+
+  <!-- Tab Switcher -->
+  <nav
+    class="flex justify-center gap-6 mb-8 max-w-3xl mx-auto"
+    role="tablist"
+    aria-label="Seller profile tabs"
+  >
+    <button
+      id="offersTab"
+      class="tab-button px-6 py-3 rounded-xl transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
+      role="tab"
+      aria-selected="true"
+      aria-controls="offersSection"
+      tabindex="0"
+      onclick="showTab('offers')"
+    >
+      Offers
+    </button>
+    <button
+      id="reviewsTab"
+      class="tab-button px-6 py-3 rounded-xl transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
+      role="tab"
+      aria-selected="false"
+      aria-controls="reviewsSection"
+      tabindex="-1"
+      onclick="showTab('reviews')"
+    >
+      Seller Reviews
+    </button>
+  </nav>
+
+  <!-- Offers Section -->
+  <section
+    id="offersSection"
+    class="space-y-6 max-w-4xl mx-auto animate-slide-up"
+    role="tabpanel"
+    aria-labelledby="offersTab"
+  >
+    {% for offer in offers %}
+    <article
+      class="bg-gray-800 p-6 rounded-3xl shadow-md hover:shadow-xl transition transform hover:scale-[1.02] cursor-pointer"
+      tabindex="0"
+    >
+      <h2 class="text-xl font-semibold mb-1">{{ offer.offer_name }}</h2>
+      <p class="text-sm text-gray-400 mb-1">${{ offer.price }} | {{ offer.category }}</p>
+      <p class="text-xs text-gray-500 mb-1">Created on: {{ offer.timestamp }}</p>
+      {% for offer in offers %}
+      <p class="text-lg font-semibold">{{ offer.reviews_count }}</p>
+      {% endfor %}
+    </article>
+    {% endfor %}
+  </section>
+
+  <!-- Reviews Section (hidden by default) -->
+  <section
+    id="reviewsSection"
+    class="space-y-6 max-w-4xl mx-auto animate-slide-up hidden"
+    role="tabpanel"
+    aria-labelledby="reviewsTab"
+    tabindex="0"
+  >
+    {% for review in reviews %}
+    <article
+      class="bg-gray-800 p-6 rounded-3xl shadow-md"
+      tabindex="0"
+    >
+      <p class="mb-2">
+        <strong>{{ review.reviewer_name }}</strong>
+        <em class="text-sm text-gray-400 ml-2">({{ review.timestamp }})</em>
+      </p>
+      <p>{{ review.review }}</p>
+    </article>
+    {% endfor %}
+  </section>
+
+  <script>
+    // Dark mode automatic toggle based on user system preference
+    function applyDarkMode() {
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+    applyDarkMode();
+
+    // Listen for changes in preference
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", applyDarkMode);
+
+    function showTab(tab) {
+      const offers = document.getElementById("offersSection");
+      const reviews = document.getElementById("reviewsSection");
+      const offersTab = document.getElementById("offersTab");
+      const reviewsTab = document.getElementById("reviewsTab");
+
+      if (tab === "offers") {
+        offers.classList.remove("hidden");
+        reviews.classList.add("hidden");
+        offersTab.classList.add("active");
+        offersTab.setAttribute("aria-selected", "true");
+        offersTab.tabIndex = 0;
+        reviewsTab.classList.remove("active");
+        reviewsTab.setAttribute("aria-selected", "false");
+        reviewsTab.tabIndex = -1;
+      } else {
+        reviews.classList.remove("hidden");
+        offers.classList.add("hidden");
+        reviewsTab.classList.add("active");
+        reviewsTab.setAttribute("aria-selected", "true");
+        reviewsTab.tabIndex = 0;
+        offersTab.classList.remove("active");
+        offersTab.setAttribute("aria-selected", "false");
+        offersTab.tabIndex = -1;
+      }
+    }
+
+    // Default tab on load
+    showTab("offers");
+
+    // Loading overlay fade out on load
+    window.addEventListener("load", () => {
+      const overlay = document.getElementById("loadingOverlay");
+      overlay.classList.add("hidden");
+      setTimeout(() => {
+        overlay.style.display = "none";
+      }, 500);
+    });
+  </script>
+</body>
+</html>
